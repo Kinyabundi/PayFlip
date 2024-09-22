@@ -13,28 +13,17 @@ import { Button } from "@/components/ui/button";
 import { ethers } from 'ethers';
 import { useAuth } from '@/context/AuthContext';
 import { profileABI } from '@/abi/contract';
-import Pay from '@/components/modal/pay';
 
 interface ProductData {
     productName: string;
     description: string;
-    imageUrl: string;
     price: string;
-    merchantAddress: string; 
+    merchantAddress: string;
 }
 
-const Products = () => {
+const MyProducts = () => {
     const { user } = useAuth();
     const [products, setProducts] = useState<ProductData[]>([]);
-  const [showPayModal, setShowPayModal] = useState(false);
-  const [selectedMerchant, setSelectedMerchant] = useState<string>('');
-
-  const handleBuy = (merchantAddress: string) => {
-    console.log("Opening pay modal"); 
-    setSelectedMerchant(merchantAddress);
-    setShowPayModal(true);
-  };
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,13 +31,12 @@ const Products = () => {
             const contract = new ethers.Contract("0x6Bf0fcAD09AD26F59b53095F1bF605e417e5eb79", profileABI, provider);
 
             try {
-                const allProducts = await contract.getAllProducts();
-                const formattedProducts = allProducts.map((product: any) => ({
-                    productName: product.name,
-                    description: product.description,
-                    // imageUrl: product.imageUrl,
-                    price: product.price.toString(),
-                    merchantAddress: product.merchant
+                const productDetails = await contract.getProductsByMerchant(user?.address);
+                const formattedProducts = productDetails.map((product: any) => ({
+                    productName: product[0],
+                    description: product[1],
+                    price: product[3].toString(), // Keep price as provided
+                    // merchantAddress: product[4]
                 }));
                 setProducts(formattedProducts);
             } catch (err) {
@@ -56,18 +44,23 @@ const Products = () => {
             }
         };
 
-        fetchData();
-        const intervalId = setInterval(fetchData, 10000); // Fetch every 10 seconds
-        return () => clearInterval(intervalId);
-    }, []);
+        if (user?.address) {
+            fetchData();
+            const intervalId = setInterval(fetchData, 10000); // Fetch every 10 seconds
+            return () => clearInterval(intervalId);
+        }
+    }, [user]);
 
-  
+    const handleBuy = (product: ProductData) => {
+        // Implement buy functionality here
+        console.log('Buying product:', product);
+        // You might want to call a smart contract method or open a modal here
+    };
 
     return (
-        <>
         <div>
             <div className='mt-10 flex flex-row space-x-4 items-center justify-center'>
-                <h1 className='font-bold text-lg'>All Products</h1>
+                <h1 className='font-bold text-lg'>Products</h1>
                 <div className="flex-grow"></div>
             </div>
             <div className='mt-8'>
@@ -77,8 +70,6 @@ const Products = () => {
                             <TableHead>Product Name</TableHead>
                             <TableHead>Price</TableHead>
                             <TableHead>Description</TableHead>
-                            {/* <TableHead>Image</TableHead> */}
-                            <TableHead>Merchant Address</TableHead>
                             <TableHead>Action</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -88,13 +79,9 @@ const Products = () => {
                                 <TableCell>{product.productName}</TableCell>
                                 <TableCell>{product.price}</TableCell>
                                 <TableCell>{product.description}</TableCell>
-                                {/* <TableCell>
-                                    <img src={product.imageUrl} alt={product.productName} className="w-16 h-16 object-cover" />
-                                </TableCell> */}
-                                <TableCell>{product.merchantAddress}</TableCell>
                                 <TableCell>
-                                    <Button onClick={() => handleBuy(product.merchantAddress)}>
-                                        Buy
+                                    <Button onClick={() => handleBuy(product)}>
+                                        Edit
                                     </Button>
                                 </TableCell>
                             </TableRow>
@@ -103,15 +90,7 @@ const Products = () => {
                 </Table>
             </div>
         </div>
-         {showPayModal && (
-            <Pay
-              isOpen={showPayModal}
-              onClose={() => setShowPayModal(false)}
-              merchantAddress={selectedMerchant}
-            />
-          )}
-          </>
     );
 };
 
-export default Products;
+export default MyProducts;

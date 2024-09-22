@@ -84,14 +84,14 @@ const PersonalDetails = ({ role }: RoleProps) => {
 
             const uoResponse = await sendUserOperation({
                 uo: {
-                    target: '0x657e7DDC6301eA9193646d3a2aed00be855D2fA0',
+                    target: '0x6Bf0fcAD09AD26F59b53095F1bF605e417e5eb79',
                     data: uoCallData,
                 }
             }, {
                 onSuccess: ({ hash }) => {
                     toast.success("Account Created")
                     console.log(hash);
-                    router.push("/app/merchant/product/new");
+                    router.push("/app/merchant/product/dashboard");
 
                 },
                 onError: (error) => {

@@ -79,7 +79,7 @@ const LogOutBtn = () => {
 	)
 }
 
-const Sider = () => {
+const MerchantSider = () => {
 	return (
 		<div className="hidden md:flex flex-col w-[14rem]  border-r border-gray-200 h-screen overflow-y-auto">
 			<div className="flex flex-row gap-4 items-center">
@@ -88,7 +88,10 @@ const Sider = () => {
 				</div>
 			</div>
 			<div className="flex flex-col mt-8 space-y-6 p-6">
-				<LinkItem title="Products" icon={<LayoutDashboard className="text-[#cbceeb]" size={18} />} href="/app/buyer/products/view" />
+				<LinkItem title="Dashboard" icon={<LayoutDashboard className="text-[#cbceeb]" size={18} />} href="/merchant/product/dashboard" />
+				<LinkItem title="Add Products" icon={<LayoutDashboard className="text-[#cbceeb]" size={18} />} href="/merchant/product/new" />
+				<LinkItem title="My Products" icon={<LayoutDashboard className="text-[#cbceeb]" size={18} />} href="/merchant/product/view" />
+
 				<LogOutBtn />
 			</div>
 		</div>
@@ -97,4 +100,4 @@ const Sider = () => {
 
 
 
-export default Sider;
+export default MerchantSider;

@@ -77,7 +77,7 @@ const AddProduct = () => {
 
             const uoResponse = await sendUserOperation({
                 uo: {
-                    target: '0x657e7DDC6301eA9193646d3a2aed00be855D2fA0',
+                    target: '0x6Bf0fcAD09AD26F59b53095F1bF605e417e5eb79',
                     data: uoCallData,
                 }
             }, {
@@ -120,7 +120,7 @@ const AddProduct = () => {
                                         //@ts-ignore
                                         <Input
                                             type="text"
-                                            placeholder="Shoes"
+                                            placeholder="product Name"
                                             {...field}
                                         />
                                     )}
@@ -132,7 +132,7 @@ const AddProduct = () => {
                                         //@ts-ignore
                                         <Input
                                             type="text"
-                                            placeholder="Addidas Shoes"
+                                            placeholder="Short Descrption ..."
                                             {...field}
                                         />
                                     )}
@@ -144,7 +144,7 @@ const AddProduct = () => {
                                         //@ts-ignore
                                         <Input
                                             type="text"
-                                            placeholder="Addidas Shoes"
+                                            placeholder="Image"
                                             {...field}
                                         />
                                     )}
@@ -156,7 +156,7 @@ const AddProduct = () => {
                                         //@ts-ignore
                                         <Input
                                             type="num"
-                                            placeholder="$400"
+                                            placeholder="price"
                                             {...field}
                                         />
                                     )}

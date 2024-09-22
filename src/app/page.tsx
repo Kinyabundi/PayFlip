@@ -52,7 +52,7 @@ const getUser = async () => {
   };
 
   const provider = new ethers.JsonRpcProvider('https://base-sepolia.g.alchemy.com/v2/XJjEhlbtuCP5a6aZvpacjn16Aqd9G0z1');
-  const contract = new ethers.Contract("0x657e7DDC6301eA9193646d3a2aed00be855D2fA0", profileABI, provider);
+  const contract = new ethers.Contract("0x6Bf0fcAD09AD26F59b53095F1bF605e417e5eb79", profileABI, provider);
 
   try {
     console.log(user?.address)
@@ -80,7 +80,7 @@ const getUser = async () => {
 
     // Redirect based on the role
     if (roleString === 'Buyer') {
-      router.push('/app/buyer/products'); 
+      router.push('/app/buyer/products/view'); 
     } else if (roleString === 'Merchant') {
       router.push('/app/merchant/product/new'); 
     } else {
@@ -111,7 +111,7 @@ useEffect(() => {
                 <p className="text-[#FFE840] text-4xl font-bold">PayFlip</p>
               </div>
             </div>
-            <img src="../images/logo.svg" alt="payflip" className="object-cover h-[99vh] bg-gray-100" />
+            <img src="https://static.scientificamerican.com/sciam/cache/file/3FE9ABC3-2CC3-41D8-AE636C8A1CD61909_source.jpeg?w=1200" alt="payflip" className="object-cover h-[99vh] bg-gray-100" />
           </div>
           {isLoading ?
             (

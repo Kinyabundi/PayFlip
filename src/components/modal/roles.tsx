@@ -36,7 +36,7 @@ const RoleSelectModal: React.FC<RoleSelectModalProps> = ({ isOpen, onClose }) =>
             Buyer
           </button>
         </div>
-        <button
+        <button 
           className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           onClick={onClose}
         >

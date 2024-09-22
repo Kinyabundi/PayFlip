@@ -1,4 +1,4 @@
-import MyProducts from "@/app/app/_components/MyProducts";
+import Products from "@/app/app/_components/Products";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function page() {
-	return <MyProducts />;
+	return <Products />;
 }

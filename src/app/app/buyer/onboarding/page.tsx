@@ -1,10 +1,10 @@
 import { Metadata } from "next";
-import  CreateAccount  from "@/app/app/_components/CreateAccount";
+import CreateBuyerAccount from "../../_components/CreateBuyerAccount";
 
 export const metadata: Metadata = {
 	title: "CreateAccount",
 };
 
 export default function page() {
-	return <CreateAccount  role={"Buyer"}/>;
+	return <CreateBuyerAccount  role={"Buyer"}/>;
 }
