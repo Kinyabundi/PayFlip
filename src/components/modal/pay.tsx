@@ -43,16 +43,16 @@ const Pay: React.FC<RoleSelectModalProps> = ({ isOpen, onClose, merchantAddress 
 
     const sendToMerchantWallet = async () => {
         try {
-            const response = await fetch(`${API_URL}/onramp/fiat-to-crypto/wallet`, {
+            const response = await fetch('https://sandbox-api.kotanipay.io/api/v3/onramp/fiat-to-crypto/wallet', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${API_KEY}`
+                    'Authorization': 'Bearer eyJ1c2VyX2lkIjoiNjRlNzFhNjg4NWRiZDQ2MjkzN2JhZWJiIiwiY3JlYXRlZF9hdCI6IjIwMjQtMDktMjFUMTI6NDg6MzIuMjgyWiJ9.95d13e5d5547a9c2f86e44f4f58c2b7869e26ac0d72918cfd6a037d689312810'
                 },
                 body: JSON.stringify({
                     source_wallet: "65245a75f38cafb8ea703883",
                     receivers_address: merchantAddress,
-                    amount: amount/130,
+                    amount: 1,
                     chain: "BASE",
                     token: "USDC"
                 })
@@ -64,6 +64,11 @@ const Pay: React.FC<RoleSelectModalProps> = ({ isOpen, onClose, merchantAddress 
                 toast.error(responseBody.message || 'Failed to submit');
                 return;
             }
+            // const reference = response?.data?.reference_id
+            // const transactionstatus = await fetch(`https://sandbox-api.kotanipay.io/api/v3/onramp/fiat-to-crypto/${status}`, {
+            //     method: 'GET',
+            // })
+
             toast.success("Payment transferred to merchant successfully");
         } catch (error) {
             console.error('Error while transferring to merchant', error);
@@ -87,8 +92,8 @@ const Pay: React.FC<RoleSelectModalProps> = ({ isOpen, onClose, merchantAddress 
                     fullName: name,
                     amount: amount,
                     currency: currency,
-                    wallet_id: "65245a75f38cafb8ea703883",
-                    reference_id: "65245a75f38cafb",
+                    wallet_id: "66efbf0c2fa0ee24e3d28e25",
+                    reference_id: Math.floor(Math.random() * 90000000) + 10000000,
                 }),
             });
 
@@ -154,7 +159,7 @@ const Pay: React.FC<RoleSelectModalProps> = ({ isOpen, onClose, merchantAddress 
                         <Label>Currency</Label>
                         <Select value={currency} onValueChange={(val) => setCurrency(val)}>
                             <SelectTrigger >
-                                <SelectValue placeholder="Network" />
+                                <SelectValue placeholder="Currency" />
                             </SelectTrigger>
                             <SelectContent className='bg-gray-100'>
                                 <SelectItem value='KES'>KES</SelectItem>
