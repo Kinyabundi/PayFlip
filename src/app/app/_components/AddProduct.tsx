@@ -77,7 +77,7 @@ const AddProduct = () => {
 
             const uoResponse = await sendUserOperation({
                 uo: {
-                    target: '0x6Bf0fcAD09AD26F59b53095F1bF605e417e5eb79',
+                    target: '0x3578966a427236C326bCd72244de9F8456141F9B',
                     data: uoCallData,
                 }
             }, {

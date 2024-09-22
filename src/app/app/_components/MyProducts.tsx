@@ -28,7 +28,7 @@ const MyProducts = () => {
     useEffect(() => {
         const fetchData = async () => {
             const provider = new ethers.JsonRpcProvider('https://base-sepolia.g.alchemy.com/v2/XJjEhlbtuCP5a6aZvpacjn16Aqd9G0z1');
-            const contract = new ethers.Contract("0x6Bf0fcAD09AD26F59b53095F1bF605e417e5eb79", profileABI, provider);
+            const contract = new ethers.Contract("0x3578966a427236C326bCd72244de9F8456141F9B", profileABI, provider);
 
             try {
                 const productDetails = await contract.getProductsByMerchant(user?.address);

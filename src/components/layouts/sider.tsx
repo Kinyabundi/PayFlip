@@ -88,7 +88,7 @@ const Sider = () => {
 				</div>
 			</div>
 			<div className="flex flex-col mt-8 space-y-6 p-6">
-				<LinkItem title="Products" icon={<LayoutDashboard className="text-[#cbceeb]" size={18} />} href="/app/buyer/products/view" />
+				<LinkItem title="Products" icon={<LayoutDashboard className="text-[#cbceeb]" size={18} />} href="/buyer/products/view" />
 				<LogOutBtn />
 			</div>
 		</div>
