@@ -32,7 +32,7 @@ const MyProducts = () => {
 
             try {
                 const productDetails = await contract.getProductsByMerchant(user?.address);
-                const formattedProducts = productDetails.map((product: any) => ({
+                const formattedProducts = productDetails.map((product: ProductData[]) => ({
                     productName: product[0],
                     description: product[1],
                     price: product[3].toString(),

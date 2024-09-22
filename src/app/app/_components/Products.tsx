@@ -41,12 +41,12 @@ const Products = () => {
 
             try {
                 const allProducts = await contract.getAllProducts();
-                const formattedProducts = allProducts.map((product: any) => ({
-                    productName: product.name,
+                const formattedProducts = allProducts.map((product: ProductData) => ({
+                    productName: product.productName,
                     description: product.description,
                     // imageUrl: product.imageUrl,
                     price: product.price.toString(),
-                    merchantAddress: product.merchant
+                    merchantAddress: product.merchantAddress
                 }));
                 setProducts(formattedProducts);
             } catch (err) {
