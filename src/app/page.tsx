@@ -55,7 +55,7 @@ const getUser = async () => {
       return;
     }
 
-    const [ userRole ] = userDetails;
+    const [ userName ,userRole ] = userDetails;
 
     const roleMapping: {[key:string]: number} = {
       Buyer: 0,
