@@ -3,23 +3,18 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/AuthContext';
-import React, { FormEvent, useState } from 'react';
+import React, {  useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { InferType, object, string } from "yup";
-import { ethers } from 'ethers';
-import { useSendUserOperation, useSignMessage, useSmartAccountClient } from "@alchemy/aa-alchemy/react";
+import { useSendUserOperation, useSmartAccountClient } from "@alchemy/aa-alchemy/react";
 import { encodeFunctionData } from 'viem';
 import {
-    chain,
-    accountType,
     gasManagerConfig,
     accountClientOptions as opts,
 } from "@/lib/config";
 import toast from "react-hot-toast";
 import { Controller } from 'react-hook-form';
-import { useChain } from "@alchemy/aa-alchemy/react";
 import { profileABI } from "@/abi/contract";
 import { useRouter } from 'next/navigation';
 
@@ -36,7 +31,6 @@ interface RoleProps {
 }
 
 const PersonalDetails = ({ role }: RoleProps) => {
-    const { chain, setChain } = useChain();
     const formMethods = useForm({ resolver: yupResolver(personalDetailsSchema) });
     const { handleSubmit, reset, control } = formMethods;
     const { user } = useAuth();
@@ -52,9 +46,7 @@ const PersonalDetails = ({ role }: RoleProps) => {
 
     const {
         sendUserOperation,
-        sendUserOperationResult,
         isSendingUserOperation,
-        error: isSendUserOperationError,
     } = useSendUserOperation({ client, waitForTxn: true });
 
 
@@ -70,7 +62,6 @@ const PersonalDetails = ({ role }: RoleProps) => {
                 Merchant: 1,
             };
 
-            //@ts-ignore
             const numericRole = roleMapping[role];
 
             const uoCallData = encodeFunctionData({
@@ -80,7 +71,6 @@ const PersonalDetails = ({ role }: RoleProps) => {
             });
 
             console.log(uoCallData)
-            const contractAddress = process.env.CONTRACT_ADDRESS!;
 
             const uoResponse = await sendUserOperation({
                 uo: {
@@ -91,6 +81,8 @@ const PersonalDetails = ({ role }: RoleProps) => {
                 onSuccess: ({ hash }) => {
                     toast.success("Account Created")
                     console.log(hash);
+                    console.log(uoResponse);
+                    reset()
                     router.push("/app/merchant/product/dashboard");
 
                 },
@@ -153,7 +145,7 @@ const PersonalDetails = ({ role }: RoleProps) => {
                                 />
 
                                 <Button type="submit" disabled={isSendingUserOperation}>
-                                    {isSendingUserOperation ? "Creating..." : "Create Account"}
+                                    {loading && isSendingUserOperation ? "Creating..." : "Create Account"}
                                 </Button>
                             </div>
                         </form>

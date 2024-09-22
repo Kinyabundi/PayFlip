@@ -11,12 +11,11 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ethers } from 'ethers';
-import { useAuth } from '@/context/AuthContext';
 import { profileABI } from '@/abi/contract';
 import Pay from '@/components/modal/pay';
 
 interface ProductData {
-    productName: string;
+    name: string;
     description: string;
     imageUrl: string;
     price: string;
@@ -24,7 +23,6 @@ interface ProductData {
 }
 
 const Products = () => {
-    const { user } = useAuth();
     const [products, setProducts] = useState<ProductData[]>([]);
   const [showPayModal, setShowPayModal] = useState(false);
   const [selectedMerchant, setSelectedMerchant] = useState<string>('');
@@ -43,12 +41,12 @@ const Products = () => {
 
             try {
                 const allProducts = await contract.getAllProducts();
-                const formattedProducts = allProducts.map((product: any) => ({
+                const formattedProducts = allProducts.map((product: ProductData) => ({
                     productName: product.name,
                     description: product.description,
                     // imageUrl: product.imageUrl,
                     price: product.price.toString(),
-                    merchantAddress: product.merchant
+                    merchantAddress: product.merchantAddress
                 }));
                 setProducts(formattedProducts);
             } catch (err) {
@@ -85,7 +83,7 @@ const Products = () => {
                     <TableBody>
                         {products.map((product, index) => (
                             <TableRow key={index} className='hover:bg-gray-200'>
-                                <TableCell>{product.productName}</TableCell>
+                                <TableCell>{product.name}</TableCell>
                                 <TableCell>{product.price}</TableCell>
                                 <TableCell>{product.description}</TableCell>
                                 {/* <TableCell>

@@ -1,6 +1,5 @@
 import Header from "@/components/layouts/header";
 import MerchantSider from "@/components/layouts/merchant-sider";
-import Sider from "@/components/layouts/sider";
 import { FC, ReactNode } from "react";
 
 interface AdminLayoutProps {

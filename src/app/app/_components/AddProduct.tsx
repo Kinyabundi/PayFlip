@@ -2,26 +2,20 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useAuth } from '@/context/AuthContext';
-import React, { FormEvent, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { InferType, object, string } from "yup";
-import { ethers } from 'ethers';
-import { useSendUserOperation, useSignMessage, useSmartAccountClient } from "@alchemy/aa-alchemy/react";
+import { useSendUserOperation, useSmartAccountClient } from "@alchemy/aa-alchemy/react";
 import { encodeFunctionData } from 'viem';
 import {
-    chain,
-    accountType,
     gasManagerConfig,
     accountClientOptions as opts,
 } from "@/lib/config";
 import toast from "react-hot-toast";
 import { Controller } from 'react-hook-form';
-import { useChain } from "@alchemy/aa-alchemy/react";
 import { profileABI } from "@/abi/contract";
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 
 // Define the schema for personal details validation
@@ -36,10 +30,8 @@ const personalDetailsSchema = object({
 
 
 const AddProduct = () => {
-    const { chain, setChain } = useChain();
     const formMethods = useForm({ resolver: yupResolver(personalDetailsSchema) });
-    const { handleSubmit, reset, control } = formMethods;
-    const { user } = useAuth();
+    const { handleSubmit, control } = formMethods;
     const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter()
 
@@ -53,9 +45,7 @@ const AddProduct = () => {
 
     const {
         sendUserOperation,
-        sendUserOperationResult,
         isSendingUserOperation,
-        error: isSendUserOperationError,
     } = useSendUserOperation({ client, waitForTxn: true });
 
 
@@ -73,7 +63,6 @@ const AddProduct = () => {
             });
 
             console.log(uoCallData)
-            const contractAddress = process.env.CONTRACT_ADDRESS!;
 
             const uoResponse = await sendUserOperation({
                 uo: {
@@ -84,6 +73,7 @@ const AddProduct = () => {
                 onSuccess: ({ hash }) => {
                     toast.success("Product Added")
                     console.log(hash);
+                console.log(uoResponse)
                     router.push("/app/merchant/product/view");
 
                 },
@@ -117,7 +107,6 @@ const AddProduct = () => {
                                     control={control}
                                     name="productName"
                                     render={({ field }) => (
-                                        //@ts-ignore
                                         <Input
                                             type="text"
                                             placeholder="product Name"
@@ -129,7 +118,6 @@ const AddProduct = () => {
                                     control={control}
                                     name="description"
                                     render={({ field }) => (
-                                        //@ts-ignore
                                         <Input
                                             type="text"
                                             placeholder="Short Descrption ..."
@@ -141,7 +129,6 @@ const AddProduct = () => {
                                     control={control}
                                     name="imageUrl"
                                     render={({ field }) => (
-                                        //@ts-ignore
                                         <Input
                                             type="text"
                                             placeholder="Image"
@@ -153,7 +140,6 @@ const AddProduct = () => {
                                     control={control}
                                     name="price"
                                     render={({ field }) => (
-                                        //@ts-ignore
                                         <Input
                                             type="num"
                                             placeholder="price"
@@ -163,7 +149,7 @@ const AddProduct = () => {
                                 />
 
                                 <Button type="submit" disabled={isSendingUserOperation}>
-                                    {isSendingUserOperation ? "Adding..." : "Add Product"}
+                                    {loading && isSendingUserOperation ? "Adding..." : "Add Product"}
                                 </Button>
                             </div>
                         </form>

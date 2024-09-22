@@ -2,18 +2,13 @@
 "use client";
 import Link from "next/link";
 import { ReactNode, useMemo } from "react";
-import { LayoutDashboard, FileUp, Users, UploadCloud, LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut } from "lucide-react";
 import { cn } from "@nextui-org/react";
 
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { SiSwarm } from "react-icons/si";
 import { useAuth } from "@/context/AuthContext";
 
-interface LinkSectionProps {
-	title: string;
-	render: () => ReactNode;
-}
 
 interface LinkItemProps {
 	title: string;
@@ -22,16 +17,9 @@ interface LinkItemProps {
 	onClick?: () => void;
 }
 
-const LinkSection = ({ title, render }: LinkSectionProps) => {
-	return (
-		<div className="px-4 py-5">
-			<p className="font-medium text-sm text-gray-400">{title}</p>
-			<div className="flex space-y-2 flex-col mt-2">{render()}</div>
-		</div>
-	);
-};
 
-const LinkItem = ({ title, icon, href, onClick }: LinkItemProps) => {
+
+const LinkItem = ({ title, icon, href }: LinkItemProps) => {
 	const pathname = usePathname();
 
 	const selected = useMemo(() => {

@@ -40,6 +40,7 @@ export async function POST(req: Request) {
     const result = await apiResponse.json();
     return Response.json(result);
   } catch (error) {
+    console.log(error)
     return new Response("Server error occurred", {
       status: 500,
     });

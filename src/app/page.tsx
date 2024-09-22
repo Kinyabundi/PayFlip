@@ -1,23 +1,15 @@
 'use client';
-//@ts-ignore
 import { useRouter } from "next/navigation";
-//@ts-ignore
 import Head from "next/head";
 import { IoMdLogIn } from "react-icons/io";
-import { TiUserAddOutline } from "react-icons/ti";
 import { FiUserPlus } from "react-icons/fi";
-import { SiSwarm } from "react-icons/si";
 import { FaUserCircle } from "react-icons/fa"
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { useAccount, useLogout, useSignerStatus, useUser } from "@alchemy/aa-alchemy/react";
+import { useAccount, useLogout, useSignerStatus } from "@alchemy/aa-alchemy/react";
 import { LogInCard } from "./app/_components/LoginCard";
 import {
-  chain,
   accountType,
-  gasManagerConfig,
-  accountClientOptions as opts,
 } from "@/lib/config";
-import Web3 from 'web3';
 import { ethers } from 'ethers';
 import { useEffect, useState } from "react";
 import RoleSelectModal from "@/components/modal/roles"
@@ -47,9 +39,6 @@ const toggleRoleSelectModal = () => {
 
 
 const getUser = async () => {
-  const params = {
-    address: user?.address,
-  };
 
   const provider = new ethers.JsonRpcProvider('https://base-sepolia.g.alchemy.com/v2/XJjEhlbtuCP5a6aZvpacjn16Aqd9G0z1');
   const contract = new ethers.Contract("0x3578966a427236C326bCd72244de9F8456141F9B", profileABI, provider);
@@ -66,7 +55,7 @@ const getUser = async () => {
       return;
     }
 
-    const [userName, userRole, userAddress] = userDetails;
+    const [ userRole ] = userDetails;
 
     const roleMapping: {[key:string]: number} = {
       Buyer: 0,

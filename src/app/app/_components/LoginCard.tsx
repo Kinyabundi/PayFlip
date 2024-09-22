@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthenticate, useSignerStatus } from "@alchemy/aa-alchemy/react";
+import {  useSignerStatus } from "@alchemy/aa-alchemy/react";
 import { FormEvent, useCallback, useState } from "react";
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card";
@@ -15,8 +15,7 @@ export const LogInCard = () => {
     [],
   );
 
-  const { isAuthenticated, login } = useAuth(); 
-  const { authenticate } = useAuthenticate();
+  const {  login } = useAuth(); 
 
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {

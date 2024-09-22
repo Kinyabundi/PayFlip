@@ -1,12 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { toast } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import { Currency, Loader2 } from 'lucide-react';
+import {  Loader2 } from 'lucide-react';
 import {
     Select,
     SelectContent,
@@ -14,7 +13,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { API_URL, API_KEY, WALLET_ID } from '@/env';
 
 interface RoleSelectModalProps {
     isOpen: boolean;
@@ -31,13 +29,11 @@ const Pay: React.FC<RoleSelectModalProps> = ({ isOpen, onClose, merchantAddress 
 
     if (!isOpen) return null;
 
-
-    const router = useRouter();
-
     const reset = () => {
         setName('')
         setPhone('')
         setAmount(0)
+        setCurrency('')
     }
 
 
@@ -78,7 +74,6 @@ const Pay: React.FC<RoleSelectModalProps> = ({ isOpen, onClose, merchantAddress 
 
     const onSubmit = async () => {
         setLoading(true);
-        console.log(API_URL)
 
         try {
             const response = await fetch('https://sandbox-api.kotanipay.io/api/v3/deposit/bank/checkout', {
@@ -109,7 +104,7 @@ const Pay: React.FC<RoleSelectModalProps> = ({ isOpen, onClose, merchantAddress 
             toast.success("Payment was send successfully")
             console.log(responseData)
             await sendToMerchantWallet();
-
+            reset()
         } catch (error) {
             console.error('Error while making payment', error);
         }

@@ -37,7 +37,6 @@ export const gasManagerConfig: AlchemyGasManagerConfig = {
   policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID!,
 };
 // additional options for our account client
-//@ts-ignore
 type SmartAccountClienOptions = z.infer<typeof SmartAccountClientOptsSchema>;
 export const accountClientOptions: Partial<SmartAccountClienOptions> = {
   txMaxRetries: 20,

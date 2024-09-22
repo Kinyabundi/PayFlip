@@ -17,7 +17,6 @@ interface AuthContextData {
   login(email: string): Promise<void>;
   logout(): void;
 }
-import { useSigner } from "@alchemy/aa-alchemy/react";
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
@@ -28,10 +27,10 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [user, setUser] = useState<User>();
   const currentUser = useUser();
   const { address } = useAccount({ type: accountType });
-  const { isInitializing, isAuthenticating, isConnected, status } = useSignerStatus();
+  const { isInitializing, isConnected, status } = useSignerStatus();
   const { authenticate } = useAuthenticate();
   const { logout } = useLogout();
-  const signer = useSigner();
+  // const signer = useSigner();
 
 
 

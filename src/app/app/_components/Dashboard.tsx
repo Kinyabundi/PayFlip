@@ -5,9 +5,13 @@ import React, { useEffect, useState } from 'react';
 import Moralis from 'moralis';
 import { EvmChain } from "@moralisweb3/common-evm-utils";
 
+interface Balance {
+  symbol: string;
+  formatted_balance: string;
+}
 const Dashboard = () => {
   const { user } = useAuth();
-  const [balances, setBalances] = useState<Array<any>>([]);
+  const [balances, setBalances] = useState<Array<Balance>>([]);
   // const [balances, setBalances] = useState([]);
 
   useEffect(() => {

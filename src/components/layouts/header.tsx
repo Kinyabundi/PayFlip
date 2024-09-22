@@ -2,8 +2,6 @@
 
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useAccount, useLogout, useSignerStatus, useUser } from "@alchemy/aa-alchemy/react";
-import { accountType } from '@/lib/config';
 import { useAuth } from '@/context/AuthContext';
 
 
