@@ -15,11 +15,11 @@ import { profileABI } from '@/abi/contract';
 import Pay from '@/components/modal/pay';
 
 interface ProductData {
-    name: string;
+    productName: string;
     description: string;
     imageUrl: string;
     price: string;
-    merchant: string; 
+    merchantAddress: string; 
 }
 
 const Products = () => {
@@ -42,11 +42,11 @@ const Products = () => {
             try {
                 const allProducts = await contract.getAllProducts();
                 const formattedProducts = allProducts.map((product: ProductData) => ({
-                    productName: product.name,
+                    productName: product.productName,
                     description: product.description,
                     // imageUrl: product.imageUrl,
                     price: product.price.toString(),
-                    merchantAddress: product.merchant
+                    merchantAddress: product.merchantAddress
                 }));
                 setProducts(formattedProducts);
             } catch (err) {
@@ -83,15 +83,15 @@ const Products = () => {
                     <TableBody>
                         {products.map((product, index) => (
                             <TableRow key={index} className='hover:bg-gray-200'>
-                                <TableCell>{product.name}</TableCell>
+                                <TableCell>{product.productName}</TableCell>
                                 <TableCell>{product.price}</TableCell>
                                 <TableCell>{product.description}</TableCell>
                                 {/* <TableCell>
                                     <img src={product.imageUrl} alt={product.productName} className="w-16 h-16 object-cover" />
                                 </TableCell> */}
-                                <TableCell>{product.merchant}</TableCell>
+                                <TableCell>{product.merchantAddress}</TableCell>
                                 <TableCell>
-                                    <Button onClick={() => handleBuy(product.merchant)}>
+                                    <Button onClick={() => handleBuy(product.merchantAddress)}>
                                         Buy
                                     </Button>
                                 </TableCell>
