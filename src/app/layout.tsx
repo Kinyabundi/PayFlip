@@ -9,8 +9,8 @@ import { config } from "@/lib/config";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Quiza",
-  description: "Empowering freelancers globally with secure, instant payments and trust-based reputation management",
+  title: "PayFlip",
+  description: "Flip the script on payments: local currency in, stablecoins out with PayFlip",
 };
 
 // [!region root-layout]
