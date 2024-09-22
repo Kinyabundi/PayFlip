@@ -95,11 +95,12 @@ useEffect(() => {
       <div className="mx-auto h-screen bg-[#FFF]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 after:absolute after:opacity-25 after:left-0 after:right-0 after:top-0 after:bottom-0 after:bg-transparent after:z-[-1] bg-[#555555]">
           <div>
-            <div className="flex flex-row gap-4 items-center">
+            {/* <div className="flex flex-row gap-4 items-center">
               <div className="flex items-center gap-2">
-                <p className="text-[#FFE840] text-4xl font-bold">PayFlip</p>
               </div>
-            </div>
+            </div> */}
+            <p className="text-[#FFE840] text-4xl font-bold">PayFlip</p>
+
             <img src="https://static.scientificamerican.com/sciam/cache/file/3FE9ABC3-2CC3-41D8-AE636C8A1CD61909_source.jpeg?w=1200" alt="payflip" className="object-cover h-[99vh] bg-gray-100" />
           </div>
           {isLoading ?

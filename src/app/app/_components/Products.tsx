@@ -15,7 +15,7 @@ import { profileABI } from '@/abi/contract';
 import Pay from '@/components/modal/pay';
 
 interface ProductData {
-    name: string;
+    productName: string;
     description: string;
     imageUrl: string;
     price: string;
@@ -42,7 +42,7 @@ const Products = () => {
             try {
                 const allProducts = await contract.getAllProducts();
                 const formattedProducts = allProducts.map((product: ProductData) => ({
-                    productName: product.name,
+                    productName: product.productName,
                     description: product.description,
                     // imageUrl: product.imageUrl,
                     price: product.price.toString(),
@@ -83,7 +83,7 @@ const Products = () => {
                     <TableBody>
                         {products.map((product, index) => (
                             <TableRow key={index} className='hover:bg-gray-200'>
-                                <TableCell>{product.name}</TableCell>
+                                <TableCell>{product.productName}</TableCell>
                                 <TableCell>{product.price}</TableCell>
                                 <TableCell>{product.description}</TableCell>
                                 {/* <TableCell>
