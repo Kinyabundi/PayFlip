@@ -1,101 +1,165 @@
-import Image from "next/image";
+'use client';
+//@ts-ignore
+import { useRouter } from "next/navigation";
+//@ts-ignore
+import Head from "next/head";
+import { IoMdLogIn } from "react-icons/io";
+import { TiUserAddOutline } from "react-icons/ti";
+import { FiUserPlus } from "react-icons/fi";
+import { SiSwarm } from "react-icons/si";
+import { FaUserCircle } from "react-icons/fa"
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { useAccount, useLogout, useSignerStatus, useUser } from "@alchemy/aa-alchemy/react";
+import { LogInCard } from "./app/_components/LoginCard";
+import {
+  chain,
+  accountType,
+  gasManagerConfig,
+  accountClientOptions as opts,
+} from "@/lib/config";
+import Web3 from 'web3';
+import { ethers } from 'ethers';
+import { useEffect, useState } from "react";
+import RoleSelectModal from "@/components/modal/roles"
+import { useAuth } from "@/context/AuthContext";
+import { profileABI } from "@/abi/contract";
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+ 
+  const router = useRouter();
+  const { logout } = useLogout();
+  const {user} = useAuth();
+  const { address } = useAccount({ type: accountType });
+  const [showRoleSelectModal, setShowRoleSelectModal] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  console.log(user, "this is user")
+
+  const { isInitializing, isAuthenticating, isConnected, status } =
+    useSignerStatus();
+  const isLoading =
+    isInitializing || (isAuthenticating && status !== "AWAITING_EMAIL_AUTH");
+
+  // Function to toggle the modal visibility
+const toggleRoleSelectModal = () => {
+  setShowRoleSelectModal(!showRoleSelectModal);
+};
+
+
+const getUser = async () => {
+  const params = {
+    address: user?.address,
+  };
+
+  const provider = new ethers.JsonRpcProvider('https://base-sepolia.g.alchemy.com/v2/XJjEhlbtuCP5a6aZvpacjn16Aqd9G0z1');
+  const contract = new ethers.Contract("0x657e7DDC6301eA9193646d3a2aed00be855D2fA0", profileABI, provider);
+
+  try {
+    console.log(user?.address)
+
+    const userDetails = await contract.getUserByAddress(user?.address);
+    console.log(userDetails)
+  
+    if (!userDetails || userDetails.length !== 3) {
+      console.log('No valid user details found for address', user?.address);
+      router.push('/');
+      return;
+    }
+
+    const [userName, userRole, userAddress] = userDetails;
+
+    const roleMapping: {[key:string]: number} = {
+      Buyer: 0,
+      Merchant: 1,
+    };
+
+    const roleNumeric = Number(userRole);
+    const roleString = Object.keys(roleMapping).find(key => roleMapping[key] === roleNumeric);
+
+    console.log(roleString)
+
+    // Redirect based on the role
+    if (roleString === 'Buyer') {
+      router.push('/app/buyer/products'); 
+    } else if (roleString === 'Merchant') {
+      router.push('/app/merchant/product/new'); 
+    } else {
+      router.push('/');
+    }
+  } catch (error) {
+    console.error('Failed to fetch user details:', error);
+    // Handle error, e.g., show an error message
+  }
+};
+
+useEffect(() => {
+  getUser();
+}, [user]);
+
+
+
+  return (
+    <>
+      <Head>
+        <title>Payflip | Home</title>
+      </Head>
+      <div className="mx-auto h-screen bg-[#FFF]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 after:absolute after:opacity-25 after:left-0 after:right-0 after:top-0 after:bottom-0 after:bg-transparent after:z-[-1] bg-[#555555]">
+          <div>
+            <div className="flex flex-row gap-4 items-center">
+              <div className="flex items-center gap-2">
+                <p className="text-[#FFE840] text-4xl font-bold">PayFlip</p>
+              </div>
+            </div>
+            <img src="../images/logo.svg" alt="payflip" className="object-cover h-[99vh] bg-gray-100" />
+          </div>
+          {isLoading ?
+            (
+              <LoadingSpinner />
+            ) : isConnected ?
+              (
+                <div className="relative flex items-center justify-center w-full md:w-[11/12] xl:w-[8/12] mx-auto">
+                  <div className="flex flex-col">
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-short text-gray-900 dark:text-white">
+                      <span className="block xl:inline text-[#cbceeb]">Welcome to PayFlip</span>
+                    </h1>
+                    <p className="mt-3 sm:mt-5 md:mt-5 mx-auto sm:mx-0 mb-6 text-lg md:text-xl text-gray-500 leading-base">
+                    Flip the script on payments: local currency in, stablecoins out with PayFlip.
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center mb-4 md:mb-8 space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+                      <button className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded inline-flex items-center" onClick={() => toggleRoleSelectModal()}>
+                      <FiUserPlus className="w-6 h-6 mr-1" />
+                      Set Up Profile
+                    </button>
+                      <button className="bg-white text-gray-900 hover:bg-gray-300 font-bold py-2 px-4 rounded inline-flex items-center" onClick={() => logout()}>
+                        <IoMdLogIn className="w-6 h-6 mr-1" />
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                  {/* Avatar positioned at the top-right corner */}
+                  <div className="absolute top-0 right-0 mt-4 mr-4">
+                    <h1 className="flex flex-row  gap-4 text-sm leading-short text-gray-900 dark:text-white">
+                      <FaUserCircle size={40} className="text-[#cbceeb]" />
+                      <div className="flex flex-col">
+                        <span className="block xl:inline text-[#cbceeb]">{user?.email}</span>
+                        <span className="block xl:inline text-[#cbceeb]">{address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Wallet Address'}</span>
+                      </div>
+                    </h1>
+                  </div>
+                </div>
+                // <ProfileCard />
+              ) : (
+                <LogInCard />
+              )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+      {showRoleSelectModal && (
+        <RoleSelectModal
+          isOpen={showRoleSelectModal}
+          onClose={() => setShowRoleSelectModal(false)}
+        />
+      )}
+    </>
   );
-}
+};
