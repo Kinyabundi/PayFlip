@@ -144,7 +144,7 @@ const Pay: React.FC<RoleSelectModalProps> = ({ isOpen, onClose, merchantAddress 
                         <Label>Amount</Label>
                         <Input
                             type="number"
-                            value={amount}
+                            value={amount.toString()}
                             onChange={(e) => setAmount(Number(e.target.value))}
                             placeholder='100'
                             required
