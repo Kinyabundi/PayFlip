@@ -57,6 +57,8 @@ const getUser = async () => {
 
     const [ userName ,userRole ] = userDetails;
 
+    console.log(userName)
+
     const roleMapping: {[key:string]: number} = {
       Buyer: 0,
       Merchant: 1,

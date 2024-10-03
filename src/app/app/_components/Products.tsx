@@ -22,6 +22,16 @@ interface ProductData {
     merchantAddress: string; 
 }
 
+interface Product {
+    name: string;
+    description: string;
+    imageUrl: string;
+    price: string;
+    merchant: string; 
+}
+
+
+
 const Products = () => {
     const [products, setProducts] = useState<ProductData[]>([]);
   const [showPayModal, setShowPayModal] = useState(false);
@@ -41,7 +51,7 @@ const Products = () => {
 
             try {
                 const allProducts = await contract.getAllProducts();
-                const formattedProducts = allProducts.map((product: any) => ({
+                const formattedProducts = allProducts.map((product: Product) => ({
                     productName: product.name,
                     description: product.description,
                     // imageUrl: product.imageUrl,

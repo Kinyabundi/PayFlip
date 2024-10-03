@@ -147,7 +147,6 @@ const AddProduct = () => {
                                         />
                                     )}
                                 />
-
                                 <Button type="submit" disabled={isSendingUserOperation}>
                                     {loading && isSendingUserOperation ? "Adding..." : "Add Product"}
                                 </Button>
